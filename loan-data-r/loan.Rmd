@@ -1,0 +1,323 @@
+---
+title: "Loan Data Exploration"
+output: html_notebook
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+
+```{r}
+# load data
+df <- read.csv("C:\\Users\\Ezinne\\Desktop\\loan_data_set.csv")
+# view first six rows
+print(head(df))
+print(tail(df))
+```
+
+```{r}
+# view data structure
+str(df)
+```
+
+```{r}
+summary(df)
+```
+
+```{r}
+# check for columns with null values
+colSums(is.na(df))
+```
+
+```{r}
+# fill LoanAmount empty column with mean values
+df$LoanAmount[is.na(df$LoanAmount)] <- mean(df$LoanAmount, na.rm = TRUE)
+
+# fill Loan_Amount_Term empty column with mean values
+df$Loan_Amount_Term[is.na(df$Loan_Amount_Term)] <- mean(df$Loan_Amount_Term, na.rm = TRUE)
+
+# fill credit_history with mode
+mode_credit_history <- as.numeric(names(sort(table(df$Credit_History), decreasing = TRUE)[1]))
+df$Credit_History[is.na(df$Credit_History)] <- mode_credit_history
+
+```
+
+
+```{r}
+# confirm there are no null values in all columns
+colSums(is.na(df))
+```
+
+```{r}
+# extracting duplicates
+duplicates <- df[duplicated(df),]
+duplicates
+```
+
+
+```{r}
+print(unique(df$Loan_Status))
+df$Loan_Status[df$Loan_Status == "N"] <- "No"
+df$Loan_Status[df$Loan_Status == "Y"] <- "Yes"
+df <- df[df$Loan_Status != "0",]
+print(unique(df$Loan_Status))
+```
+
+```{r}
+unique(df$Gender)
+df$Gender[df$Gender == ""] <- "Others"
+unique(df$Gender)
+```
+
+```{r}
+print(unique(df$Married))
+df$Married[df$Married == ""] <- "Others"
+print(unique(df$Married))
+```
+
+```{r}
+print(unique(df$Dependents))
+df$Dependents[df$Dependents == ""] <- "0"
+print(unique(df$Dependents))
+```
+```{r}
+print(unique(df$Self_Employed))
+df$Self_Employed[df$Self_Employed == ""] <- "Others"
+print(unique(df$Self_Employed))
+```
+
+```{r}
+# convert the Credit History from integers to strings
+df$Credit_History <- as.character(df$Credit_History)
+unique(df$Credit_History)
+```
+#### Adding a New Column: Income Category
+
+```{r}
+# define income category based on summary statistics
+lower_class <- 2500
+lower_middle <- 4830
+middle_class <- 7830
+upper_middle <- 12750
+
+# create income category using ifelse statement
+df <- df %>%
+  mutate(IncomeCategory = ifelse(ApplicantIncome <= lower_class, "Lower Class",
+                                 ifelse(ApplicantIncome <= lower_middle, "Lower Middle Class",
+                                        ifelse(ApplicantIncome <= middle_class, "Middle Class",
+                                               ifelse(ApplicantIncome <= upper_middle, "Upper Middle Class", 
+                                                      ifelse(ApplicantIncome > upper_middle, "Upper Class", ""))))))
+```
+
+
+
+### Frequency Count
+
+```{r}
+gender_freq <- df %>% count(Gender)
+ggplot(gender_freq, aes(x=Gender, y = n, fill = Gender)) +
+  geom_bar(stat="identity") +
+  labs(title="Distribution by Gender", x = "", y = "")
+```
+
+```{r}
+income_category_freq <- df %>% count(IncomeCategory)
+ggplot(income_category_freq, aes(x=IncomeCategory, y = n, fill = IncomeCategory)) +
+  geom_bar(stat="identity") +
+  labs(title="Distribution by Income Category", x = "", y = "")
+```
+
+
+```{r}
+married_freq <- df %>% count(Married)
+ggplot(married_freq, aes(x=Married, y = n, fill = Married)) +
+  geom_bar(stat="identity") +
+  labs(title = "Distribution by Marital Status", x = "", y = "")
+```
+
+```{r}
+dependents_freq <- df %>% count(Dependents)
+ggplot(dependents_freq, aes(x=Dependents, y = n, fill = Dependents)) +
+  geom_bar(stat="identity") +
+  labs(title = "Distribution of No of Dependents", y = "")
+print(dependents_freq)
+```
+```{r}
+education_freq <- df %>% count (Education)
+ggplot(education_freq, aes(x= Education, y = n, fill = Education)) +
+  geom_bar(stat="identity") +
+  labs(title = "Distribution of Educational Background", x = "", y="")
+```
+
+```{r}
+self_employed_freq <- df %>% count(Self_Employed)
+ggplot(self_employed_freq, aes (x=Self_Employed, y= n, fill = Self_Employed)) +
+  geom_bar(stat="identity") +
+  labs(title = "Distribution by Employment Status")
+print(self_employed_freq)
+```
+
+```{r}
+credit_history_freq <- df %>% count(Credit_History)
+ggplot(credit_history_freq, aes(x=Credit_History, y = n, fill = Credit_History)) +
+  geom_bar(stat = "identity") +
+  labs(title="Credit History", x = "Credit History", y = "")
+```
+
+```{r}
+property_area_freq <- df %>% count(Property_Area)
+ggplot(property_area_freq, aes(x=Property_Area, y = n, fill = Property_Area)) +
+  geom_bar(stat="identity") +
+  labs(title = "Distribution of Applicants by Property Area", x = "", y ="")
+```
+
+```{r}
+loan_status_freq <- df %>% count(Loan_Status)
+ggplot(loan_status_freq, aes(x=Loan_Status, y = n, fill = Loan_Status)) +
+  geom_bar(stat="identity") +
+  labs(title = "Loan Status", x= "", y = "")
+print(loan_status_freq)
+```
+
+
+#### Distribution Analysis
+
+
+```{r}
+ggplot(df, aes(x=Gender, y = LoanAmount)) +
+  geom_boxplot(fill = "green") +
+  labs(title = "Loan Amount Distribution by Gender", y = "Loan Amount")
+```
+
+```{r}
+ggplot(df, aes(x= Married , y= ApplicantIncome)) +
+  geom_boxplot(fill = "pink") +
+  labs(title = "Applicants Income Distribution by Marital Status", x = "Married", y = "Income")
+```
+
+```{r}
+# calculate correlation coefficient
+cor_coefficient <- cor(df$ApplicantIncome, df$LoanAmount, use = "complete.obs")
+
+ggplot(df, aes(x=ApplicantIncome, y = LoanAmount)) +
+  geom_point(color = "blue", alpha = 0.6) + # scatter plot points
+  geom_smooth(method = "lm", color = "red") + # linear trend line
+  labs(title = paste("Correlation: ", round(cor_coefficient, 2)),
+       x = "Applicant Income",
+       y = "Loan Amount")
+```
+
+#### Loan Approval Rate by Gender
+
+
+```{r}
+approval_rate_by_gender <- df %>%
+  group_by(Gender) %>%
+  summarise(approval_rate = mean(Loan_Status == "Yes", na.rm = TRUE) * 100)
+
+ggplot(approval_rate_by_gender, aes(x=Gender, y = approval_rate)) +
+  geom_bar(stat = "identity" , fill = "skyblue") +
+  labs(title="Loan Approval Rate by Gender", y = "Approval Rate (%)", x = "") +
+  ylim(0, 100) +
+  theme_minimal()
+```
+
+#### Loan Approval Rate by Marital Status
+```{r}
+# calculate approval rate by marital status
+
+approval_rate_by_marital_status <- df %>%
+  group_by(Married) %>%
+  summarise(approval_rate = mean(Loan_Status == "Yes", na.rm = TRUE) * 100)
+
+ggplot(approval_rate_by_marital_status, aes(x=Married, y = approval_rate)) +
+  geom_bar(stat = "identity" , fill = "green") +
+  labs(title="Loan Approval Rate by Marital Status", y = "Approval Rate (%)", x = "") +
+  ylim(0, 100) +
+  theme_minimal()
+
+```
+
+#### Loan Approval Rate by Education
+```{r}
+approval_rate_by_education <- df %>%
+  group_by(Education) %>%
+  summarise(approval_rate = mean(Loan_Status == "Yes", na.rm = TRUE) * 100)
+
+ggplot(approval_rate_by_education, aes(x = Education, y = approval_rate)) +
+  geom_bar(stat = "identity" , fill = "darkblue") +
+  labs(title="Loan Approval Rate by Education Status", y = "Approval Rate (%)", x = "") +
+  ylim(0, 100) +
+  theme_minimal()
+```
+
+```{r}
+approval_rate_by_employment <- df %>%
+  group_by(Self_Employed) %>%
+  summarise(approval_rate = mean(Loan_Status == "Yes", na.rm = TRUE) * 100)
+
+ggplot(approval_rate_by_employment, aes(x=Self_Employed, y = approval_rate)) +
+  geom_bar(stat = "identity" , fill = "blue") +
+  labs(title="Loan Approval Rate by Self-Employed Status", y = "Approval Rate (%)", x = "") +
+  ylim(0, 100) +
+  theme_minimal()
+```
+
+
+#### Loan Approval Rates by Property Area
+```{r}
+approval_rate_by_property_area <- df %>%
+  group_by(Property_Area) %>%
+  summarise(approval_rate = mean(Loan_Status == "Yes", na.rm = TRUE) * 100)
+
+ggplot(approval_rate_by_property_area, aes(x=Property_Area, y = approval_rate)) +
+  geom_bar(stat = "identity" , fill = "skyblue") +
+  labs(title="Loan Approval Rate by Property Area", y = "Approval Rate (%)", x = "") +
+  ylim(0, 100) +
+  theme_minimal()
+```
+
+
+#### Loan Approval Rates by Income Level
+
+```{r}
+approval_rate_by_income_category <- df %>%
+  group_by(IncomeCategory) %>%
+  summarise(approval_rate = mean(Loan_Status == "Yes", na.rm = TRUE) * 100)
+
+ggplot(approval_rate_by_income_category, aes(x=IncomeCategory, y = approval_rate)) +
+  geom_bar(stat = "identity" , fill = "pink") +
+  labs(title="Loan Approval Rate by Income Category", y = "Approval Rate (%)", x = "") +
+  ylim(0, 100) +
+  theme_minimal()
+
+```
+
+#### Summary of Analysis
+- **Demographic Distribution:**
+  - **Gender:** The majority of loan applicants are male.
+  - **Income Category:** Most applicants fall into the Lower Middle Class income category, while the Upper Class represents the smallest group.
+  - **Marital Status:** Married individuals apply for loans more frequently than unmarried individuals.
+  - **Dependents:** Most applicants have no dependents.
+  - **Education:** The majority of applicants are graduates.
+  - **Employment Status:** Most applicants are not self-employed.
+  - **Credit History:** A significant portion of applicants has a positive credit history (1).
+  - **Property Area Distribution:** Applicants are fairly distributed across different property areas (Urban, Semiurban, Rural).
+
+- **Loan Approval:**
+  - **Overall:** The majority of applicants received the loan they applied for.
+  - **Income vs. Loan Amount:** No significant relationship exists between applicant income and the loan amount requested.
+  - **Gender and Marital Status:** Loan approval is fairly evenly distributed across genders and marital statuses.
+  - **Education:** Graduates have a slightly higher chance of loan approval compared to non-graduates.
+  - **Employment Status*:** Loan approval rates are fairly evenly distributed across different employment statuses.
+  - **Property Area:** Applicants from Semiurban areas have a slightly higher chance of loan approval compared to those from Urban and Rural areas.
+  - **Income Category:** Loan approval rates are evenly distributed across income categories.
+
+### Insights
+
+- There is no strong correlation between applicant income and loan amount, indicating that loan approval is not influenced by income level alone.
+- Graduates are marginally favored in the loan approval process, suggesting that education may play a minor role in approval chances.
+- Employment status and income categories show no significant disparity in loan approval rates, highlighting a consistent approval process across these factors.
+- The slightly higher approval rate in Semiurban areas could suggest regional variations in loan processing or applicant profiles.
