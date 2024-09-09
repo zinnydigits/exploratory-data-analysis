@@ -1,7 +1,7 @@
 ### Project Overview
 The project aims to analyze the performance of a digital campaign by examining key metrics like conversion rates, total users gained, bounce rates, and most effective channels. Through thorough data analysis, insights were derived to optimize future campaign strategies and enhance overall marketing efficiencies.
 
-![digitalcampaign_dashboard](https://github.com/zinnydigits/digital_campaign/blob/main/digital-campaign-db.PNG)
+![digitalcampaign_dashboard](https://github.com/zinnydigits/exploratory-data-analysis/blob/main/digital-campaign/digital-campaign-db.PNG)
 
 ### Data Source
 The data was obtained from [absentdata.com](https://absentdata.com/data-analysis/where-to-find-data/).
@@ -43,4 +43,4 @@ The data was obtained from [absentdata.com](https://absentdata.com/data-analysis
 - [absentdata.com](https://absentdata.com)
 - Chandoo Youtube Channel
 
-Note: This repository also contains the [raw data](https://github.com/zinnydigits/digital_campaign/blob/main/digital_campaign_Data.xlsx), [cleaned data](https://github.com/zinnydigits/digital_campaign/blob/main/cleaned_digital_campaign_Data.xlsx) and [power BI](https://github.com/zinnydigits/digital_campaign/blob/main/digital_campaign_dashboard.pbix) file of this project.
+Note: This repository also contains the [raw data](https://github.com/zinnydigits/exploratory-data-analysis/blob/main/digital-campaign/digital_campaign_Data.xlsx), [cleaned data](https://github.com/zinnydigits/exploratory-data-analysis/blob/main/digital-campaign/cleaned_digital_campaign_Data.xlsx) and [power BI](https://github.com/zinnydigits/exploratory-data-analysis/blob/main/digital-campaign/digital_campaign_dashboard.pbix) file of this project.
