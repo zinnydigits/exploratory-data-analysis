@@ -5,7 +5,7 @@
 
 This repository contains an analysis of student performance based on a dataset with 1000 entries. The dataset includes various factors such as gender, race/ethnicity, parental level of education, lunch type, and test preparation course completion. Using Power BI, Power Query, and DAX, several visualizations and insights have been generated to understand the impact of these factors on students' academic performance.
 
-![Students' Performance Dashboard](https://github.com/zinnydigits/students-performance-pbi/blob/main/studentsperformancepbi.PNG)
+![Students' Performance Dashboard](https://github.com/zinnydigits/exploratory-data-analysis/blob/main/students-performance-pbi/studentsperformancepbi.PNG)
 
 
 ## Dataset Description
@@ -66,4 +66,4 @@ The dataset consists of 1000 entries with the following columns:
 - Group C is the most populated ethnic group while group E has the best academic performance.
 - Students who had standard lunch and completed their test preparation course perform better than students with free/reduced lunch and did not complete their test preparation course.
 
-The students' performance [Power BI Dashboard](https://github.com/zinnydigits/students-performance-pbi/blob/main/studentsperformance.pbix) and [students performance dataset](https://github.com/zinnydigits/students-performance-pbi/blob/main/StudentsPerformance.csv) are all uploaded on this repository.
+The students' performance [Power BI Dashboard]([https://github.com/zinnydigits/students-performance-pbi/blob/main/](https://github.com/zinnydigits/exploratory-data-analysis/blob/main/students-performance-pbi/studentsperformance.pbix) and [students performance dataset]([https://github.com/zinnydigits/students-performance-pbi/blob/main/](https://github.com/zinnydigits/exploratory-data-analysis/blob/main/students-performance-pbi/StudentsPerformance.csv) are all uploaded on this repository.
